@@ -1,0 +1,34 @@
+pipeline {
+    agent any
+
+    stages {
+        stage('Build Docker Image') {
+            steps {
+                script {
+                    // Build Docker image from Dockerfile in repo root
+                    sh 'docker build -t myapp:latest .'
+                }
+            }
+        }
+
+        stage('Run Docker Container') {
+            steps {
+                script {
+                    // Run container from built image
+                    sh 'docker run --name myapp_container myapp:latest'
+                }
+            }
+        }
+
+        stage('Remove Container') {
+            steps {
+                script {
+                    // Stop and remove container after run
+                    sh 'docker rm -f myapp_container || true'
+                }
+            }
+        }
+    }
+}
+
+
